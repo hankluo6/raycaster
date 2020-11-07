@@ -53,30 +53,14 @@ float RayCasterFloat::Distance(float playerX,
         startDeltaX = (1 - offsetY) * tan(rayA);
         startDeltaY = (1 - offsetX) / tan(rayA);
     } else if (rayA <= M_PI) {
-        if (offsetY == 0) {
-            startDeltaX = (1) * fabs(tan(rayA));
-        } else {
-            startDeltaX = (offsetY) *fabs(tan(rayA));
-        }
+        startDeltaX = (offsetY) *fabs(tan(rayA));
         startDeltaY = -(1 - offsetX) / fabs(tan(rayA));
     } else if (rayA < 3 * M_PI_2) {
-        if (offsetY == 0) {
-            startDeltaX = -(1) * fabs(tan(rayA));
-        } else {
-            startDeltaX = -(offsetY) *fabs(tan(rayA));
-        }
-        if (offsetX == 0) {
-            startDeltaY = -(1) / fabs(tan(rayA));
-        } else {
-            startDeltaY = -(offsetX) / fabs(tan(rayA));
-        }
+        startDeltaX = -(offsetY) *fabs(tan(rayA));
+        startDeltaY = -(offsetX) / fabs(tan(rayA));
     } else {
         startDeltaX = -(1 - offsetY) * fabs(tan(rayA));
-        if (offsetX == 0) {
-            startDeltaY = (1) / fabs(tan(rayA));
-        } else {
-            startDeltaY = (offsetX) / fabs(tan(rayA));
-        }
+        startDeltaY = (offsetX) / fabs(tan(rayA));
     }
 
     float interceptX = rayX + startDeltaX;
@@ -148,11 +132,13 @@ void RayCasterFloat::Trace(uint16_t screenX,
     *textureY = 0;
     *textureStep = 0;
     if (distance > 0) {
-        *screenY = INV_FACTOR / distance;
-        auto txs = (*screenY * 2.0f);
+        uint16_t t = INV_FACTOR / distance;
+        *screenY = t;
+        auto txs = (t * 2.0f);
         if (txs != 0) {
             *textureStep = (256 / txs) * 256;
             if (txs > SCREEN_HEIGHT) {
+                *screenY = SCREEN_HEIGHT >> 1;
                 auto wallHeight = (txs - SCREEN_HEIGHT) / 2;
                 *textureY = wallHeight * (256 / txs) * 256;
             }

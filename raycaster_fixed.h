@@ -1,6 +1,6 @@
 #pragma once
+#include <array>
 #include "raycaster.h"
-
 class RayCasterFixed : public RayCaster
 {
 public:
@@ -37,10 +37,10 @@ private:
                           bool inverse,
                           uint8_t quarter,
                           uint8_t angle,
-                          const uint16_t *lookupTable);
+                          const std::array<uint16_t, 256> &lookupTable);
     static int16_t AbsTan(uint8_t quarter,
                           uint8_t angle,
-                          const uint16_t *lookupTable);
+                          const std::array<uint16_t, 256> &lookupTable);
     static uint16_t MulU(uint8_t v, uint16_t f);
     static int16_t MulS(uint8_t v, int16_t f);
 };
